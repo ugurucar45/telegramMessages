@@ -1,1 +1,43 @@
 
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+
+public class TelegramBot extends TelegramLongPollingBot {
+
+    private static final String BOT_USERNAME = "your_bot_username";
+    private static final String BOT_TOKEN = "your_bot_token";
+
+    @Override
+    public void onUpdateReceived(Update update) {
+        // We don't need to process incoming messages for this example
+    }
+
+    public void sendMessageToChannel(String channelName, String message) throws TelegramApiException {
+        // Create a SendMessage object with the message and target channel name
+        SendMessage sendMessage = new SendMessage()
+                .setChatId("@" + channelName)
+                .setText(message);
+
+        // Send the message to the target channel
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiRequestException e) {
+            // Handle any errors that may occur during sending the message
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getBotUsername() {
+        return BOT_USERNAME;
+    }
+
+    @Override
+    public String getBotToken() {
+        return BOT_TOKEN;
+    }
+}
